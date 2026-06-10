@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLAD-MHG Implementation & Site Integration Roadmap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // ==========================================
+    // 📊 EDIT YOUR DATA HERE
+    // ==========================================
+    const dashboardData = {
+      title: "GLAD-MHG",
+      subtitle: "Implementation & Site Integration Roadmap",
+      currentReadiness: 61, // Updates the big percentage box automatically
+      
+      tasks: [
+        {
+          title: "Lab Protocol",
+          subtext: "Core SOP Documentation",
+          progress: 100,
+          badgeText: "100% FINALIZED",
+          badgeColor: "bg-emerald-100 text-emerald-700",
+          barColor: "bg-emerald-600",
+          phaseText: "COMPLETE",
+          phaseColor: "text-emerald-600"
+        },
+        {
+          title: "Order of Tubes",
+          subtext: "Ordering 8 sets of 24 bloods",
+          progress: 100, // Used for progress bar fill width
+          badgeText: "APPROVED",
+          badgeColor: "bg-emerald-100 text-emerald-700",
+          barColor: "bg-emerald-600",
+          phaseText: "PROCUREMENT STAGE",
+          phaseColor: "text-emerald-600"
+        },
+        {
+          title: "Hamilton Automation",
+          subtext: "Scripting & Aliquotting",
+          progress: 90,
+          badgeText: "90% COMPLETE",
+          badgeColor: "bg-blue-100 text-blue-600",
+          barColor: "bg-blue-500",
+          phaseText: "FINAL VALIDATION",
+          phaseColor: "text-slate-400"
+        },
+        {
+          title: "LIMS Integration",
+          subtext: "Field Mapping & Testing",
+          progress: 70,
+          badgeText: "70% ACTIVE",
+          badgeColor: "bg-blue-100 text-blue-600",
+          barColor: "bg-blue-600",
+          phaseText: "UAT PHASE",
+          phaseColor: "text-blue-600"
+        },
+        {
+          title: "Site Initiation Doc",
+          subtext: "Operational Readiness",
+          progress: 60,
+          badgeText: "60% DRAFTED",
+          badgeColor: "bg-blue-50 text-blue-500",
+          barColor: "bg-blue-400",
+          phaseText: "IN REVIEW",
+          phaseColor: "text-slate-400"
+        },
+        {
+          title: "Speech Questionnaire",
+          subtext: "Qualtrics voice testing via multi-device",
+          progress: 40,
+          badgeText: "40% TESTING",
+          badgeColor: "bg-amber-50 text-amber-600 border border-amber-200",
+          barColor: "bg-amber-500",
+          phaseText: "DEVICE VALIDATION",
+          phaseColor: "text-amber-500"
+        },
+        {
+          title: "NHS Site Mapping",
+          subtext: "Stakeholder Identification",
+          progress: 20,
+          badgeText: "20% INITIALIZING",
+          badgeColor: "bg-slate-100 text-slate-500",
+          barColor: "bg-slate-400",
+          phaseText: "PLANNED",
+          phaseColor: "text-slate-400"
+        },
+        {
+          title: "API: Spark ↔ LIMS",
+          subtext: "Data Bridge Initialization",
+          progress: 10,
+          badgeText: "10% INITIALIZING",
+          badgeColor: "bg-slate-100 text-slate-500",
+          barColor: "bg-slate-400",
+          phaseText: "PLANNED",
+          phaseColor: "text-slate-400"
+        }
+      ]
+    };
+  </script>
+</head>
+<body class="bg-slate-50 min-h-screen p-6 md:p-12 font-sans antialiased">
+
+  <div class="max-w-6xl mx-auto">
+    
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
+      <div>
+        <h1 id="main-title" class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-2"></h1>
+        <p id="main-subtitle" class="text-xl md:text-2xl text-slate-500 font-medium"></p>
+      </div>
+      
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-w-[240px] text-center">
+        <span class="text-xs font-bold tracking-wider text-slate-400 uppercase">Current Readiness</span>
+        <div id="readiness-value" class="text-6xl font-black text-emerald-500 mt-1"></div>
+      </div>
+    </header>
+
+    <main id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      </main>
+
+  </div>
+
+  <script>
+    document.getElementById('main-title').textContent = dashboardData.title;
+    document.getElementById('main-subtitle').textContent = dashboardData.subtitle;
+    document.getElementById('readiness-value').textContent = dashboardData.currentReadiness + '%';
+
+    const container = document.getElementById('cards-container');
+
+    dashboardData.tasks.forEach(task => {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100/80 flex flex-col justify-between min-h-[260px] transition-all hover:shadow-md";
+
+      card.innerHTML = `
+        <div>
+          <div class="mb-5">
+            <span class="text-[10px] font-extrabold tracking-wider uppercase px-3 py-1.5 rounded-full ${task.badgeColor}">
+              ${task.badgeText}
+            </span>
+          </div>
+          
+          <h3 class="text-xl font-bold text-slate-800 leading-snug mb-1">${task.title}</h3>
+          <p class="text-sm text-slate-400 font-medium leading-relaxed">${task.subtext}</p>
+        </div>
+
+        <div>
+          <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-5">
+            <div class="${task.barColor} h-full rounded-full" style="width: ${task.progress}%"></div>
+          </div>
+          
+          <span class="text-xs font-extrabold tracking-wider uppercase ${task.phaseColor}">
+            ${task.phaseText}
+          </span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
