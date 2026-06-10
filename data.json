@@ -6,5 +6,5 @@
   { "title": "Site Initiation Doc", "subtext": "Operational Readiness", "progress": 60, "phaseText": "IN REVIEW" },
   { "title": "Speech Questionnaire", "subtext": "Qualtrics voice testing via multi-device", "progress": 40, "phaseText": "DEVICE VALIDATION" },
   { "title": "NHS Site Mapping", "subtext": "Stakeholder Identification", "progress": 20, "phaseText": "PLANNED" },
-  { "title": "API: Spark ↔ LIMS", "subtext": "Data Bridge Initialization", "progress": 10, "phaseText": "PLANNED" }
+  { "title": "API: Spark ↔ LIMS", "subtext": "Data Bridge Initialization", "progress": 100, "phaseText": "PLANNED" }
 ]
