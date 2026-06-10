@@ -5,26 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GLAD-MHG Implementation & Site Integration Roadmap</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // ==========================================
-    // 📊 EDIT YOUR DATA HERE (Just change numbers and text)
-    // ==========================================
-    const dashboardData = {
-      title: "GLAD-MHG",
-      subtitle: "Implementation & Site Integration Roadmap",
-      
-      tasks: [
-        { title: "Lab Protocol", subtext: "Core SOP Documentation", progress: 100, phaseText: "COMPLETE" },
-        { title: "Order of Tubes", subtext: "Ordering 8 sets of 24 bloods", progress: 100, phaseText: "PROCUREMENT STAGE" },
-        { title: "Hamilton Automation", subtext: "Scripting & Aliquotting", progress: 90, phaseText: "FINAL VALIDATION" },
-        { title: "LIMS Integration", subtext: "Field Mapping & Testing", progress: 70, phaseText: "UAT PHASE" },
-        { title: "Site Initiation Doc", subtext: "Operational Readiness", progress: 60, phaseText: "IN REVIEW" },
-        { title: "Speech Questionnaire", subtext: "Qualtrics voice testing via multi-device", progress: 40, phaseText: "DEVICE VALIDATION" },
-        { title: "NHS Site Mapping", subtext: "Stakeholder Identification", progress: 20, phaseText: "PLANNED" },
-        { title: "API: Spark ↔ LIMS", subtext: "Data Bridge Initialization", progress: 10, phaseText: "PLANNED" }
-      ]
-    };
-  </script>
 </head>
 <body class="bg-slate-50 min-h-screen p-6 md:p-12 font-sans antialiased">
 
@@ -32,8 +12,8 @@
     
     <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
       <div>
-        <h1 id="main-title" class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-2"></h1>
-        <p id="main-subtitle" class="text-xl md:text-2xl text-slate-500 font-medium"></p>
+        <h1 class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-2">GLAD-MHG</h1>
+        <p class="text-xl md:text-2xl text-slate-500 font-medium">Implementation & Site Integration Roadmap</p>
       </div>
       
       <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-w-[240px] text-center">
@@ -43,81 +23,96 @@
     </header>
 
     <main id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      </main>
+      <div id="loading" class="text-slate-400 font-medium text-lg col-span-full text-center py-12">Loading roadmap data...</div>
+    </main>
 
   </div>
 
   <script>
     const container = document.getElementById('cards-container');
-    document.getElementById('main-title').textContent = dashboardData.title;
-    document.getElementById('main-subtitle').textContent = dashboardData.subtitle;
+    const readinessEl = document.getElementById('readiness-value');
+    const loadingEl = document.getElementById('loading');
 
-    let totalPercentSum = 0;
+    // Fetch the external JSON file dynamically
+    fetch('./data.json')
+      .then(response => {
+        if (!response.ok) throw new Error("Could not load data.json");
+        return response.json();
+      })
+      .then(tasks => {
+        // Clear loading message
+        loadingEl.remove();
 
-    dashboardData.tasks.forEach(task => {
-      // Add progress to calculation variable
-      totalPercentSum += task.progress;
+        let totalPercentSum = 0;
 
-      // Determine UI Colors and Labels based on the progress number
-      let badgeColor, barColor, phaseColor, labelSuffix;
+        tasks.forEach(task => {
+          totalPercentSum += task.progress;
 
-      if (task.progress === 100) {
-        labelSuffix = task.phaseText === "COMPLETE" ? "FINALIZED" : "APPROVED";
-        badgeColor = "bg-emerald-100 text-emerald-700";
-        barColor = "bg-emerald-600";
-        phaseColor = "text-emerald-600";
-      } else if (task.progress >= 50) {
-        labelSuffix = task.progress >= 90 ? "COMPLETE" : (task.progress >= 70 ? "ACTIVE" : "DRAFTED");
-        badgeColor = "bg-blue-100 text-blue-600";
-        barColor = "bg-blue-600";
-        phaseColor = task.progress >= 70 ? "text-blue-600" : "text-slate-400";
-      } else if (task.progress >= 30) {
-        labelSuffix = "TESTING";
-        badgeColor = "bg-amber-50 text-amber-600 border border-amber-200";
-        barColor = "bg-amber-500";
-        phaseColor = "text-amber-500";
-      } else {
-        labelSuffix = "INITIALIZING";
-        badgeColor = "bg-slate-100 text-slate-500";
-        barColor = "bg-slate-300";
-        phaseColor = "text-slate-400";
-      }
+          // Determine visual styles based on progress integer
+          let badgeColor, barColor, phaseColor, labelSuffix;
 
-      // Format exception for the unique "APPROVED" tube badge
-      const dynamicBadgeText = task.phaseText === "PROCUREMENT STAGE" && task.progress === 100 
-        ? "APPROVED" 
-        : `${task.progress}% ${labelSuffix}`;
+          if (task.progress === 100) {
+            labelSuffix = task.phaseText === "COMPLETE" ? "FINALIZED" : "APPROVED";
+            badgeColor = "bg-emerald-100 text-emerald-700";
+            barColor = "bg-emerald-600";
+            phaseColor = "text-emerald-600";
+          } else if (task.progress >= 50) {
+            labelSuffix = task.progress >= 90 ? "COMPLETE" : (task.progress >= 70 ? "ACTIVE" : "DRAFTED");
+            badgeColor = "bg-blue-100 text-blue-600";
+            barColor = "bg-blue-600";
+            phaseColor = task.progress >= 70 ? "text-blue-600" : "text-slate-400";
+          } else if (task.progress >= 30) {
+            labelSuffix = "TESTING";
+            badgeColor = "bg-amber-50 text-amber-600 border border-amber-200";
+            barColor = "bg-amber-500";
+            phaseColor = "text-amber-500";
+          } else {
+            labelSuffix = "INITIALIZING";
+            badgeColor = "bg-slate-100 text-slate-500";
+            barColor = "bg-slate-300";
+            phaseColor = "text-slate-400";
+          }
 
-      // Build out the item card layout
-      const card = document.createElement('div');
-      card.className = "bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100/80 flex flex-col justify-between min-h-[260px] transition-all hover:shadow-md";
+          const dynamicBadgeText = task.phaseText === "PROCUREMENT STAGE" && task.progress === 100 
+            ? "APPROVED" 
+            : `${task.progress}% ${labelSuffix}`;
 
-      card.innerHTML = `
-        <div>
-          <div class="mb-5">
-            <span class="text-[10px] font-extrabold tracking-wider uppercase px-3 py-1.5 rounded-full ${badgeColor}">
-              ${dynamicBadgeText}
-            </span>
-          </div>
-          <h3 class="text-xl font-bold text-slate-800 leading-snug mb-1">${task.title}</h3>
-          <p class="text-sm text-slate-400 font-medium leading-relaxed">${task.subtext}</p>
-        </div>
+          // Create the HTML component structure
+          const card = document.createElement('div');
+          card.className = "bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100/80 flex flex-col justify-between min-h-[260px] transition-all hover:shadow-md";
 
-        <div>
-          <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-5">
-            <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${task.progress}%"></div>
-          </div>
-          <span class="text-xs font-extrabold tracking-wider uppercase ${phaseColor}">
-            ${task.phaseText}
-          </span>
-        </div>
-      `;
-      container.appendChild(card);
-    });
+          card.innerHTML = `
+            <div>
+              <div class="mb-5">
+                <span class="text-[10px] font-extrabold tracking-wider uppercase px-3 py-1.5 rounded-full ${badgeColor}">
+                  ${dynamicBadgeText}
+                </span>
+              </div>
+              <h3 class="text-xl font-bold text-slate-800 leading-snug mb-1">${task.title}</h3>
+              <p class="text-sm text-slate-400 font-medium leading-relaxed">${task.subtext}</p>
+            </div>
 
-    // 🧮 Compute overall readiness score as a pure mathematical average
-    const calculatedAverage = dashboardData.tasks.length > 0 ? Math.round(totalPercentSum / dashboardData.tasks.length) : 0;
-    document.getElementById('readiness-value').textContent = calculatedAverage + '%';
+            <div>
+              <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-5">
+                <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${task.progress}%"></div>
+              </div>
+              <span class="text-xs font-extrabold tracking-wider uppercase ${phaseColor}">
+                ${task.phaseText}
+              </span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        // Compute and print out the running dynamic average 
+        const calculatedAverage = tasks.length > 0 ? Math.round(totalPercentSum / tasks.length) : 0;
+        readinessEl.textContent = calculatedAverage + '%';
+      })
+      .catch(error => {
+        console.error(error);
+        loadingEl.textContent = "Failed to load roadmap tasks. Make sure data.json exists.";
+        loadingEl.className = "text-red-500 font-medium text-center col-span-full py-12";
+      });
   </script>
 </body>
 </html>
